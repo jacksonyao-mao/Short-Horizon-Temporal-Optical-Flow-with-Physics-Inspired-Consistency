@@ -1,0 +1,11 @@
+torch
+torchvision
+numpy
+Pillow
+opencv-python
+networkx
+tqdm
+tensorboard
+tensorly==0.9.0
+tensorly-torch==0.5.0
+opt-einsum
