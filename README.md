@@ -1,19 +1,33 @@
-# Short-Horizon Temporal Optical Flow with Physics-Inspired Consistency
+<h1 align="center">Short-Horizon Temporal Optical Flow with<br>Physics-Inspired Consistency</h1>
 
-**Sihan Yao\*, Yuxuan Huang\*, and Peng Sun** · Duke Kunshan University · **INSAI 2026**  
-\* Equal contribution.
+<p align="center">
+  <a href="mailto:sihan.yao@dukekunshan.edu.cn">Sihan Yao</a><sup>*</sup>,
+  <a href="mailto:y.huang@dukekunshan.edu.cn">Yuxuan Huang</a><sup>*</sup>, and
+  <a href="mailto:peng.sun568@dukekunshan.edu.cn">Peng Sun</a><sup>†</sup>
+</p>
+
+<p align="center">
+  Duke Kunshan University<br>
+  <sup>*</sup> Equal contribution &nbsp; <sup>†</sup> Corresponding author<br>
+  🎉 <strong>Accepted at the 6th INSAI conference (INSAI 2026)</strong>
+</p>
+
+## 📣 News
+
+- **2026-11-18** — Code released.
+- **2026-11-03** — Paper accepted at the 6th INSAI conference (INSAI 2026).
 
 This repository contains the PyTorch implementation of the paper’s optical flow model. Given four consecutive RGB frames, it estimates three dense displacement fields, one for each adjacent frame pair. The paper studies where a U-shaped Fourier neural operator (UNO) should act on motion features and how to train the sequence when KITTI supplies flow labels for only one pair.
 
-## Architecture
+## 🧠 Architecture
 
-![Architecture from Figure 1. Image and pairwise motion encoders feed a fusion module. Early UNO refines motion features before fusion, Late UNO refines the fused features, and Standalone UNO transforms the fused features before decoding.](Model/figures/architecture.png)
+![Architecture from Figure 1. Image and pairwise motion encoders feed a fusion module. Early UNO refines motion features before fusion, Late UNO refines the fused features, and Standalone UNO transforms the fused features before decoding.](Images/architecture.png)
 
 A shared pairwise encoder builds local correlation volumes. A second encoder extracts visual features, which are fused with motion features across the clip. A coarse-to-fine decoder converts the resulting representation into flow. The **Early** and **Late** variants add the operator output as a residual at their respective integration points. **Standalone** passes the operator output directly to the decoder. The **CNN** baseline uses convolutional processing.
 
 FlyingChairs pretraining uses two frames and one dense flow target. KITTI fine-tuning transfers the pairwise encoder, visual and motion branches, fusion module, and decoder. The UNO and its projection head are initialized for the four-frame input. Training combines edge-weighted supervised endpoint error with photometric reconstruction, edge-aware smoothness, forward–backward consistency, and two-step reconstruction.
 
-## KITTI 2015 results
+## 📊 KITTI 2015 results
 
 Table 1 of the paper reports these values on **200 KITTI 2015 training sequences** after FlyingChairs pretraining and KITTI fine-tuning. EPE is endpoint error in pixels. Fl-all is the percentage of valid pixels classified as outliers. Lower values are better in every column.
 
@@ -24,17 +38,17 @@ Table 1 of the paper reports these values on **200 KITTI 2015 training sequences
 | Early (`early`) | **1.7874** | 10.72 | 2.2126 | **1.7076** | 0.06419 |
 | Late (`later`) | 2.5052 | 18.49 | 4.5734 | 2.1169 | 0.06380 |
 
-## Qualitative examples
+## 🖼️ Qualitative examples
 
 **Pairwise flow.** Early, Standalone, and Late integration estimate motion for the same KITTI image pair. Compare the predicted flow around the car on the right with the sparse ground truth and endpoint-error map beneath each prediction.
 
-![Two street images, predicted flow, sparse ground truth, and endpoint error for each of the three UNO variants.](Model/figures/pairwise-flow.png)
+![Two street images, predicted flow, sparse ground truth, and endpoint error for each of the three UNO variants.](Images/pairwise-flow.png)
 
 **Four-frame sequences.** Each scene shows four consecutive frames above three predicted flow fields from Late integration, one for each transition. The lower-right panel shows the available KITTI ground truth.
 
-![Late integration predicts three successive flow fields for each of three KITTI driving scenes.](Model/figures/short-horizon-flow.png)
+![Late integration predicts three successive flow fields for each of three KITTI driving scenes.](Images/short-horizon-flow.png)
 
-## Train and evaluate
+## 🚀 Train and evaluate
 
 Run the commands below from `Model/` in a Python environment with a compatible PyTorch and torchvision installation.
 
@@ -67,4 +81,10 @@ The training commands write weights to `checkpoints/`. Evaluation writes per-sce
 python -m visualization.visualization --config config.json --data_root "/path/to/KITTI" --checkpoint checkpoints/fullpipeline_early_kitti_from_chairs_best.pth --architecture_type early --mode multiple --max_samples 1
 ```
 
-The repository includes the model configuration and RGB normalization statistics. Dataset downloads and trained weights are separate from the source release. The bundled UNO modules are adapted from [NeuralOperator](https://github.com/neuraloperator/neuraloperator) under its [MIT license](Model/neuralop_seg/LICENSE).
+The repository includes the model configuration and RGB normalization statistics. Dataset downloads and trained weights are separate from the source release.
+
+## 🙏 Acknowledgements
+
+We thank the NeuralOperator developers for their open-source implementation, which provides the UNO components used in this work. The bundled source retains the upstream MIT license. [NeuralOperator](https://github.com/neuraloperator/neuraloperator) · [License](Model/neuralop_seg/LICENSE)
+
+We also thank the creators of FlyingChairs and the KITTI Vision Benchmark Suite for the datasets used for pretraining, fine-tuning, and evaluation. [FlyingChairs](https://lmb.informatik.uni-freiburg.de/resources/datasets/FlyingChairs.en.html) · [KITTI](https://www.cvlibs.net/datasets/kitti/)
