@@ -85,6 +85,4 @@ The repository includes the model configuration and RGB normalization statistics
 
 ## 🙏 Acknowledgements
 
-We thank the NeuralOperator developers for their open-source implementation, which provides the UNO components used in this work. The bundled source retains the upstream MIT license. [NeuralOperator](https://github.com/neuraloperator/neuraloperator) · [License](Model/neuralop_seg/LICENSE)
-
-We also thank the creators of FlyingChairs and the KITTI Vision Benchmark Suite for the datasets used for pretraining, fine-tuning, and evaluation. [FlyingChairs](https://lmb.informatik.uni-freiburg.de/resources/datasets/FlyingChairs.en.html) · [KITTI](https://www.cvlibs.net/datasets/kitti/)
+Sihan Yao and Yuxuan Huang gratefully thank Professor Peng Sun for his guidance and support throughout the entire research process.
